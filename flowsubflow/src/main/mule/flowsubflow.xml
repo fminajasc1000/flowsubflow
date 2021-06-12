@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="74395b06-a099-4300-b284-39cdec43de99" >
 		<http:listener-connection host="0.0.0.0" port="8089" />
 	</http:listener-config>
@@ -14,7 +15,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<logger level="INFO" doc:name="Logger" doc:id="faeddeb7-12ba-4635-b0d8-c3473ed13686" message="This is the log output from subflow" />
 	</sub-flow>
 	<flow name="Mainflow" doc:id="8022718c-ed65-40da-98fb-320cb644fae1" >
-		<http:listener doc:name="Listener" doc:id="13786b2d-4692-4690-b4b6-d7c63976f04a" config-ref="HTTP_Listener_config" path="/test/*" allowedMethods="GET"/>
-		<logger level="INFO" doc:name="Logger" doc:id="ad6cccb7-78b1-44d0-be03-c194c97fe5e6" message='#["This is my header "++ message.attributes.headers.firstname]'/>
+		<http:listener doc:name="Listener" doc:id="13786b2d-4692-4690-b4b6-d7c63976f04a" config-ref="HTTP_Listener_config" path="/test/*"/>
+		<validation:is-not-blank-string doc:name="Is not blank string" doc:id="902c3fbe-56c3-4943-9f77-5dfc73f22db4" value="#[message.attributes.headers.firstname]" message="FirstName Header mandatory Please fill in the value."/>
+		<logger level="INFO" doc:name="Logger" doc:id="1fbdab06-29d9-46f4-99c4-d0394261e216" message="#[message.payload]"/>
+		<set-payload value='"message: ""Request procedded"' doc:name="Set Payload" doc:id="f5ea2258-5ea9-4e9b-894c-d409d4cacba4" />
 	</flow>
 </mule>
