@@ -15,8 +15,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	</sub-flow>
 	<flow name="Mainflow" doc:id="8022718c-ed65-40da-98fb-320cb644fae1" >
 		<http:listener doc:name="Listener" doc:id="13786b2d-4692-4690-b4b6-d7c63976f04a" config-ref="HTTP_Listener_config" path="/test/*" allowedMethods="GET"/>
-		<flow-ref doc:name="Call Subflow" doc:id="62b0b5f4-53ad-4a3f-aad4-8dc5cd9dc3dc" name="HelloWorld"/>
-		<flow-ref doc:name="Call Private Flow" doc:id="2b17553e-41c7-45d0-ab51-900e5ffd28b4" name="flowsubflowFlow" />
-		<logger level="INFO" doc:name="Logger" doc:id="ad6cccb7-78b1-44d0-be03-c194c97fe5e6" message="This is my main flow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ad6cccb7-78b1-44d0-be03-c194c97fe5e6" message='#["This is my header "++ message.attributes.headers.firstname]'/>
 	</flow>
 </mule>
